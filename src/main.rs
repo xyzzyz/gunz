@@ -114,36 +114,24 @@ impl<'a> GzipReader<'a> {
 
         let fname =
             if flg & FNAME != 0 {
-                let fname_res = read_c_utf8_str(&mut self.reader);
-                if fname_res.is_err() {
-                    return Err(fname_res.unwrap_err());
-                }
-
-                Some(fname_res.unwrap())
+                Some(try!(read_c_utf8_str(&mut self.reader)))
             } else {
                 None
             };
 
         let fcomment =
             if flg & FCOMMENT != 0 {
-                let fcomment_res = read_c_utf8_str(&mut self.reader);
-                if fcomment_res.is_err() {
-                    return Err(fcomment_res.unwrap_err());
-                }
-
-                Some(fcomment_res.unwrap())
+                Some(try!(read_c_utf8_str(&mut self.reader)))
             } else {
                 None
             };
 
         let fhcrc =
             if flg & FHCRC != 0 {
-                let fhcrc_res = self.reader.read_le_u16();
-                if fhcrc_res.is_err() {
-                    return Err(fhcrc_res.unwrap_err().description().into_string());
+                match self.reader.read_le_u16() {
+                    Err(e) => return Err(e.description().into_string()),
+                    Ok(v) => Some(v)
                 }
-
-                Some(fhcrc_res.unwrap())
             } else {
                 None
             };
