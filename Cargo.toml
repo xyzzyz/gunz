@@ -1,0 +1,9 @@
+[package]
+
+name = "gunz"
+version = "0.0.1"
+authors = [ "Adam Michalik <xyzzyz@xyzzyz.net>" ]
+
+[[bin]]
+
+name = "gunz"
